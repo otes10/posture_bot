@@ -52,7 +52,7 @@ With the continued presence of COVID-19 in 2021, many students and professionals
 These are potential next steps/implementations of this project:
 - Add a hardware response when bad posture is detected (ie. servo arm slapping the user, buzzer beeping)
 - Build dedicated hardware (ie. Pi compute module) for the project
-- Compile a more thorough dataset to contain more posture poses and different people and working environments
+- Compile a more thorough dataset to contain different postures, people and working environments
 - Train a more robust model on the new dataset for better posture predictions
 - Provide more features to the Discord bot
 
