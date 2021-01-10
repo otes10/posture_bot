@@ -8,7 +8,6 @@ bad_photos = glob.glob("/home/pi/nwhacks/photos/bad/*.jpg")
 url = 'http://127.0.0.1:5000/current'
 
 date = {'date': '2021_1_9'}
-
 # request daily report
 r = requests.post(url, params=date)
 print(r.json())
