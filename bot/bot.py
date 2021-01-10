@@ -8,10 +8,11 @@ import discord
 import json
 import requests
 import math
-from datetime import date
+import datetime
 from itertools import cycle
 from time import localtime, strftime
 from posture_client import get_hourly_report
+from statistics import mean
 
 client = discord.Client()
 backgroundTask = None
@@ -38,9 +39,17 @@ async def stopProg(ctx):
 
 @bot.command(name='currentreport', help='Displays the days report')
 async def getRep(ctx):
-    response = 'Here is todays report so far'
+    response = 'Here is this hours report'
     await ctx.send(response)
-    await retrieveReport()
+    now = datetime.datetime.now()
+    await retrieveReport(ctx, now.hour)
+
+@bot.command(name='hourreport', help='set the interval for automatic reports (seconds)')
+async def setTime(ctx, arg):
+    response = 'Here is the report for {}:00'.format(arg)
+    await ctx.send(response)
+    hour = arg
+    await retrieveReport(ctx, arg)
 
 @bot.command(name='setreporttime', help='set the interval for automatic reports (seconds)')
 async def setTime(ctx, arg):
@@ -72,12 +81,16 @@ async def createReportingProcess():
         asyncio.run(retrieveReport())
 
 
-async def retrieveReport():
-    data = {'date': '2021_1_10', 'hour':'9'}
+async def retrieveReport(ctx, hour):
+    data = {'date': '2021_1_10', 'hour':str(hour)}
     report = get_hourly_report(data)
+    good = []
     for i in report['2021_1_10']:
-        good = i['posture']['good']
-        print(good)
+        good.append(i['posture']['good'])
+    average = mean(good)
+    myStr ="For the hour of {0} on {1} you averaged a {2} score for good posture".format(data['date'], data['hour'], average)
+    await ctx.send(myStr)
+    
     
 
 bot.run(TOKEN)
