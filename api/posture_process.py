@@ -17,14 +17,24 @@ from keras import models
 FILE_LOCATION_PHOTOS = '/photos/'
 FILE_LOCATION_API = '/home/pi/nwhacks/api/data/'
 TIMEZONE = 'America/Los Angeles'
+classes = ["Bad", "Good"]
 
 # Helper methods
-def image_analysis(img_name):
-    #TODO: change this to implement model
-    res = randint(0,100)
+def image_analysis(image_stream):
+    image_stream.seek(0)
+    file_bytes = np.asarray(bytearray(image_stream.read()), dtype=np.uint8)
+    img = cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)
+    img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+    img = cv2.Canny(img, 100, 200)
+    img = cv2.resize(img, (244,244))
 
+    img = (img/255.).reshape(1, img.shape[0], img.shape[1], 1)
+    mymodel = models.load_model('/home/pi/nwhacks/api/model_dev.h5')
+
+    predictions = mymodel.predict(img)
+    
     # returns a tuple of % good and % bad
-    return tuple([float(res), float(100-res)])
+    return tuple(predictions[0].tolist())
 
 time_now = datetime.datetime.now(gettz(TIMEZONE))
 date = time_now.date()
@@ -60,7 +70,11 @@ camera.capture(img_, 'jpeg')
 img_.seek(0)
 upload_file(img_, img_file)
 
-good, bad = image_analysis(img_file)
+bad, good = image_analysis(img_)
+bad = float(bad*100)
+good = float(good*100)
+print(bad)
+print(good)
 
 data = {}
 data['img_file'] = img_file
