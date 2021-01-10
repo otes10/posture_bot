@@ -270,12 +270,12 @@
       }
    },
    {
-      "img_file": "/photos/2021_1_10_10_18.jpg",
+      "img_file": "/photos/2021_1_10_10_17.jpg",
       "hour": "10",
-      "minute": "18",
+      "minute": "17",
       "posture": {
-         "good": 57.0,
-         "bad": 43.0
+         "good": 60.0,
+         "bad": 40.0
       }
    }
 ]

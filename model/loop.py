@@ -8,7 +8,7 @@ camera.iso = 1400
 
 # Automatic gain control delay
 sleep(2)
-
+print('start')
 # Fixed values
 camera.shutter_speed = camera.exposure_speed
 camera.exposure_mode = 'off'
@@ -17,6 +17,6 @@ camera.awb_mode = 'off'
 camera.awb_gains = g
 
 # Camera warm-up time
-for i in range(30):
+for i in range(80):
     camera.capture('photos/bad/test_{}.jpg'.format(i)) # referenced based on your working directory (/home/pi)
-    sleep(1.5)
+    sleep(0.2)

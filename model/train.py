@@ -1,5 +1,6 @@
 import numpy as np
-from tensorflow.keras import layers, models, callbacks
+from tensorflow.keras import layers, models, callbacks, optimizers
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import cv2
 import os
 from matplotlib import pyplot as plt
@@ -7,8 +8,11 @@ import glob
 
 # Consts
 image_shape = [244,244]
-epochs = 10
+epochs = 6
 NUMBER_OF_LABELS = 2
+LEARNING_RATE = 1e-4
+VALIDATION_SPLIT = 0.2
+BATCH_SIZE = 8
 
 def convert_to_one_hot(Y, C):
     Y = np.eye(C)[Y.reshape(-1)].T
@@ -28,18 +32,38 @@ for folder in folders:
 
 read_images = []        
 for image in imagenames_list:
-    read_images.append(cv2.resize(cv2.imread(image, cv2.IMREAD_GRAYSCALE), (image_shape[0], image_shape[1]), interpolation = cv2.INTER_AREA))
+    image_grey = cv2.imread(image, cv2.IMREAD_GRAYSCALE)
+    image_borders = cv2.Canny(image_grey, 100, 200)
+    read_images.append(cv2.resize(image_borders, (image_shape[0], image_shape[1]), interpolation = cv2.INTER_AREA))
 
 # Convert to numpy and normalize
 images = np.asarray(read_images)
-n = len(read_images)
-x = (images/255.).reshape(n, image_shape[0], image_shape[1], 1)
-print(x.shape)
 labels = np.asarray(labels).astype(int)
 
+indices = np.arange(labels.shape[0])
+np.random.shuffle(indices)
+images = images[indices]
+labels = labels[indices]
+
+n = len(read_images)
+X = (images/255.).reshape(n, image_shape[0], image_shape[1], 1)
 # Convert labels to one-hot encoding
 Y = convert_to_one_hot(labels, NUMBER_OF_LABELS).T
 
+val_index = int(n*(1-VALIDATION_SPLIT))
+print(val_index)
+X_train = X[0:val_index]
+X_test = X[val_index:-1]
+Y_train = Y[0:val_index]
+Y_test = Y[val_index:-1]
+
+datagen = ImageDataGenerator(
+    # width_shift_range = 2,
+    # height_shift_range = 2,
+    shear_range = 0.15,
+    # zoom_range = 0.1,
+    # fill_mode = "nearest"
+)   
 model = models.Sequential()
 model.add(layers.Conv2D(32, (3, 3), activation='relu',
                              input_shape=(image_shape[0], image_shape[1], 1)))
@@ -54,10 +78,10 @@ model.add(layers.Dense(64, activation='relu'))
 model.add(layers.Dense(NUMBER_OF_LABELS, activation='softmax'))
 
 model.compile(loss='binary_crossentropy',
-                   optimizer='adam',
+                   optimizer=optimizers.RMSprop(lr=LEARNING_RATE),
                    metrics=['acc'])
 
-history_conv = model.fit(x, Y, epochs=epochs)
+history_conv = model.fit(datagen.flow(X_train, Y_train, batch_size=BATCH_SIZE), validation_data=(X_test, Y_test), epochs=epochs)
 
-model_name = "posture_model.h5"
+model_name = "posture_model_canny_aug.h5"
 model.save(model_name)
