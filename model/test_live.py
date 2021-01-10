@@ -13,7 +13,7 @@ time.sleep(0.1)
 camera.capture(rawCapture, format="bgr")
 image = rawCapture.array
 # display the image on screen and wait for a keypress
-cv2.imwrite("test_input.jpg", image)
+cv2.imwrite("test_1.jpg", image)
 image = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
 image = cv2.Canny(image, 100, 200)
 image = cv2.resize(image, (244,244))

@@ -8,7 +8,7 @@ camera.iso = 1400
 
 # Automatic gain control delay
 sleep(2)
-
+print('start')
 # Fixed values
 camera.shutter_speed = camera.exposure_speed
 camera.exposure_mode = 'off'
