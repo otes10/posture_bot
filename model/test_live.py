@@ -2,7 +2,8 @@ from picamera.array import PiRGBArray
 from picamera import PiCamera
 import time
 import cv2
-import keras.models
+from keras import models
+import numpy as np
 # initialize the camera and grab a reference to the raw camera capture
 camera = PiCamera()
 rawCapture = PiRGBArray(camera)
@@ -12,8 +13,10 @@ time.sleep(0.1)
 camera.capture(rawCapture, format="bgr")
 image = rawCapture.array
 # display the image on screen and wait for a keypress
-
+cv2.imwrite("test_input.jpg", image)
 image = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
+image = cv2.resize(image, (244,244))
+
 image = (image/255.).reshape(1, image.shape[0], image.shape[1], 1)
 mymodel = models.load_model('posture_model.h5')
 predictions = mymodel.predict(image)
