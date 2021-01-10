@@ -24,10 +24,11 @@ date = time_now.date()
 hour_min = time_now.time()
 
 # Save a current date + time for filename
-timestr = str(hour_min.hour) + ':' + str(hour_min.minute)
+##Change column to underscore because crashes on pc
+timestr = str(date.year) + '_' + str(date.month) + '_' + str(date.day) + "_" + str(hour_min.hour) + '_' + str(hour_min.minute)
 img_file = FILE_LOCATION_PHOTOS + timestr + '.jpg'
 
-datastr = str(date.year) + '_' + str(date.month) + '_' + str(date.day)
+datastr = str(date.year) + '_' + str(date.month) + '_' + str(date.day) + "_" + str(hour_min.hour) + '_' + str(hour_min.minute)
 data_file = FILE_LOCATION_API + datastr + '.json'
 
 # Camera Setup
