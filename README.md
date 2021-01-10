@@ -11,6 +11,14 @@ You will also need access to a [Raspberry Pi Camera Module](https://projects.ras
 
 ## Project Architecture
 
+### How We built it
+
+The **Discord bot** was built using Python following the Discord API documentation.
+
+The **image taker** was built using Python and communicates to AWS's S3 service to store the data, and it was automated via a Cron task.
+
+The **Posture API** was built using the Flask framework and its RESTful API example codes.
+
 ### Design Choices
 
 **Why Raspberry Pi?**
