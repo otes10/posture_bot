@@ -36,20 +36,23 @@ for image in imagenames_list:
     image_borders = cv2.Canny(image_grey, 100, 200)
     read_images.append(cv2.resize(image_borders, (image_shape[0], image_shape[1]), interpolation = cv2.INTER_AREA))
 
-# Convert to numpy and normalize
+# Convert to numpy
 images = np.asarray(read_images)
 labels = np.asarray(labels).astype(int)
 
+# Shuffle indices
 indices = np.arange(labels.shape[0])
 np.random.shuffle(indices)
 images = images[indices]
 labels = labels[indices]
 
+# Normalize images
 n = len(read_images)
 X = (images/255.).reshape(n, image_shape[0], image_shape[1], 1)
 # Convert labels to one-hot encoding
 Y = convert_to_one_hot(labels, NUMBER_OF_LABELS).T
 
+# Split into train and test datasets
 val_index = int(n*(1-VALIDATION_SPLIT))
 print(val_index)
 X_train = X[0:val_index]
@@ -57,6 +60,7 @@ X_test = X[val_index:-1]
 Y_train = Y[0:val_index]
 Y_test = Y[val_index:-1]
 
+# Data augmentation
 datagen = ImageDataGenerator(
     # width_shift_range = 2,
     # height_shift_range = 2,
@@ -64,6 +68,7 @@ datagen = ImageDataGenerator(
     # zoom_range = 0.1,
     # fill_mode = "nearest"
 )   
+
 model = models.Sequential()
 model.add(layers.Conv2D(32, (3, 3), activation='relu',
                              input_shape=(image_shape[0], image_shape[1], 1)))

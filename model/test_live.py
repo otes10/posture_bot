@@ -23,7 +23,7 @@ image = cv2.resize(image, (244,244))
 image = (image/255.).reshape(1, image.shape[0], image.shape[1], 1)
 mymodel = models.load_model('posture_model_canny_aug.h5')
 
-# predictions is a 2-d numpy array in format [%Bad %Good]
+# predictions is in format [%Bad %Good]
 predictions = mymodel.predict(image)
 class_pred = np.argmax(predictions)
 conf = predictions[0][class_pred]
