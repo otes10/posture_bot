@@ -51,9 +51,6 @@ camera.capture(img_file)
 
 good, bad = image_analysis(img_file)
 
-bad = 52.0
-good = 48.0
-
 data = {}
 data['img_file'] = img_file
 data['hour'] = str(hour_min.hour)

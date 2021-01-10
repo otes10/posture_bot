@@ -17,6 +17,6 @@ camera.awb_mode = 'off'
 camera.awb_gains = g
 
 # Camera warm-up time
-for i in range(30):
-    camera.capture('photos/bad/test_{}.jpg'.format(i)) # referenced based on your working directory (/home/pi)
-    sleep(1.5)
+for i in range(20):
+    camera.capture('testing/test_{}.jpg'.format(i)) # referenced based on your working directory (/home/pi)
+    sleep(0.2)

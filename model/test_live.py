@@ -15,10 +15,11 @@ image = rawCapture.array
 # display the image on screen and wait for a keypress
 cv2.imwrite("test_input.jpg", image)
 image = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
+image = cv2.Canny(image, 100, 200)
 image = cv2.resize(image, (244,244))
 
 image = (image/255.).reshape(1, image.shape[0], image.shape[1], 1)
-mymodel = models.load_model('posture_model.h5')
+mymodel = models.load_model('posture_model_canny.h5')
 predictions = mymodel.predict(image)
 class_pred = np.argmax(predictions)
 conf = predictions[0][class_pred]
