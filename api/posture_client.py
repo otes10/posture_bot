@@ -29,8 +29,14 @@ def get_timed_image(data):
 
 
 date = {'date': '2021_1_10'}
+print('\033[1m'+'\033[94m'+"Obtaining daily report..."+'\033[0m')
 print(get_daily_report(date))
+print('\033[1m'+'\033[94m'+"Obtaining hourly report..."+'\033[0m')
 data = {'date': '2021_1_10', 'hour':'9'}
 print(get_hourly_report(data))
+print('\033[1m'+'\033[94m'+"Obtaining image..."+'\033[0m')
 data = {'datetime': '2021_1_10_3_12'}
-print(get_timed_image(data))
+r = get_timed_image(data)
+f = open('./downloaded_image.png','wb')
+f.write(r)
+f.close()
