@@ -6,6 +6,8 @@ from picamera import PiCamera
 from random import randint
 import json
 
+from aws import upload_file
+from io import BytesIO
 # Config options
 FILE_LOCATION_PHOTOS = '/home/pi/nwhacks/api/photos/'
 FILE_LOCATION_API = '/home/pi/nwhacks/api/data/'
@@ -48,7 +50,9 @@ camera.awb_mode = 'off'
 camera.awb_gains = g
 
 # Finally, take a photo with the fixed settings
-camera.capture(img_file)
+# camera.capture(img_file)
+img_ = BytesIO()
+upload_file(camera.capture(img_, 'jpg').get_contents(binary=True), img_file)
 
 good, bad = image_analysis(img_file)
 
@@ -65,4 +69,5 @@ empty = os.stat(data_file).st_size == 0
 json.dump(data,open(data_file, "a+"), indent=3)
 with open(data_file, "a+") as outfile:
     if not empty:
-        outfile.write(',\n')
+        # outfile.write(',\n')
+        upload_file(outfile.get_contents(binary=True), data_file)

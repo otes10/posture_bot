@@ -26,24 +26,24 @@ def upload_file(file, name):
                       ContentType='text/plain')
     
 ### below are used for downloads, files are chuncked if too large
-def get_total_bytes():
+def get_total_bytes(name):
     s3 = initialize()
     load_dotenv()
     result = s3.list_objects(Bucket=os.environ.get('AWS_BUCKET_NAME'))
     for item in result['Contents']:
-        if item['Key'] == 'extraction.zip':
+        if item['Key'] == name :
             return item['Size']
 
 
-def get_object(total_bytes):
+def get_object(total_bytes, name):
     s3 = initialize()
     load_dotenv()
     if total_bytes > 1000000:
-        return get_object_range(total_bytes)
-    return s3.get_object(Bucket= os.environ.get('AWS_BUCKET_NAME'), Key='extraction.zip')['Body'].read()
+        return get_object_range(total_bytes, name)
+    return s3.get_object(Bucket= os.environ.get('AWS_BUCKET_NAME'), Key=name)['Body'].read()
 
 
-def get_object_range(total_bytes):
+def get_object_range(total_bytes, name):
     s3 = initialize()
     load_dotenv()
     offset = 0
@@ -52,5 +52,5 @@ def get_object_range(total_bytes):
         total_bytes -= 1000000
         byte_range = 'bytes={offset}-{end}'.format(offset=offset, end=end)
         offset = end + 1 if not isinstance(end, str) else None
-        yield s3.get_object(Bucket= os.environ.get('AWS_BUCKET_NAME'), Key='extraction.zip', Range=byte_range)['Body'].read()
+        yield s3.get_object(Bucket= os.environ.get('AWS_BUCKET_NAME'), Key=name, Range=byte_range)['Body'].read()
 
