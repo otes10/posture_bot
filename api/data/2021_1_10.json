@@ -259,5 +259,14 @@
          "good": 3.0,
          "bad": 97.0
       }
+   },
+   {
+      "img_file": "/photos/2021_1_10_10_5.jpg",
+      "hour": "10",
+      "minute": "5",
+      "posture": {
+         "good": 22.0,
+         "bad": 78.0
+      }
    }
 ]
