@@ -13,9 +13,10 @@ def load_images_from_folder(folder):
             images.append(img)
     return images
 
-mymodel = models.load_model('posture_model_canny.h5')
+mymodel = models.load_model('posture_model_canny_aug.h5')
 
 images = load_images_from_folder('testing')
+i = 0
 for image in images:
     image = cv2.Canny(image, 100, 200)
     image = cv2.resize(image, (244, 244), interpolation = cv2.INTER_AREA)
@@ -23,4 +24,5 @@ for image in images:
     predictions = mymodel.predict(image)
     class_pred = np.argmax(predictions)
     conf = predictions[0][class_pred]
-    print(predictions)
+    print(classes[class_pred], conf)
+    i += 1
