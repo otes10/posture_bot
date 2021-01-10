@@ -1,5 +1,4 @@
 import requests
-import glob
 # url = 'http://127.0.0.1:5000/current'
 
 # date = {'date': '2021_1_10'}
@@ -25,4 +24,3 @@ def get_timed_image(data):
     url = 'https://jolly-seahorse-2.loca.lt/image'
     r = requests.post(url, params=data)
     return r.content
-

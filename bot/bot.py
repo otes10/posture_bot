@@ -4,13 +4,14 @@ import matplotlib.pyplot as plt
 from discord.ext import commands
 from dotenv import load_dotenv
 import asyncio
-
+import discord
 import json
 import requests
 import math
+from datetime import date
 from itertools import cycle
 from time import localtime, strftime
-from api.posture_client import get_hourly_report
+from posture_client import get_hourly_report
 
 client = discord.Client()
 backgroundTask = None
@@ -35,13 +36,13 @@ async def stopProg(ctx):
     time = math.inf
     asyncio.run(createReportingProcess())
 
-@bot.command(name='current report', help='Displays the days report')
+@bot.command(name='currentreport', help='Displays the days report')
 async def getRep(ctx):
     response = 'Here is todays report so far'
     await ctx.send(response)
-    retrieveReport()
+    await retrieveReport()
 
-@bot.command(name='set report time', help='set the interval for automatic reports (seconds)')
+@bot.command(name='setreporttime', help='set the interval for automatic reports (seconds)')
 async def setTime(ctx, arg):
     assert(type(arg=int))
     global time
@@ -52,15 +53,15 @@ async def setTime(ctx, arg):
     backgroundTask = asyncio.create_task(createReportingProcess())
 
 
-@bot.command(name='visualize report', help='Create a graphical visualization for your report')
-async def runProg(ctx):
+# @bot.command(name='visualize report', help='Create a graphical visualization for your report')
+# async def runProg(ctx):
 
-async def genVisReport():
-    plt.title('report for {}'.format(strftime("%a, %d %b %Y", localtime)))
-    plt.ylabel('proportion')
-    hours = None
-    left = range(hours * 2)
-    tick_label = ['good', 'bad'] * hours
+# async def genVisReport():
+#     plt.title('report for {}'.format(strftime("%a, %d %b %Y", localtime)))
+#     plt.ylabel('proportion')
+#     hours = None
+#     left = range(hours * 2)
+#     tick_label = ['good', 'bad'] * hours
 
 
 async def createReportingProcess():
@@ -72,9 +73,11 @@ async def createReportingProcess():
 
 
 async def retrieveReport():
-    datestr = str(date.year) + '_' + str(date.month) + '_' + str(date.day)
-    filename = '../api/data/2021_1_10.json'
-    data = json.load(open(filename,'r'))
-    good = [item['good'] for item in data]
+    data = {'date': '2021_1_10', 'hour':'9'}
+    report = get_hourly_report(data)
+    for i in report['2021_1_10']:
+        good = i['posture']['good']
+        print(good)
+    
 
 bot.run(TOKEN)
