@@ -1,8 +1,0 @@
-{
-    "img_file": "/home/pi/nwhacks/api/photos/05:27.jpg",
-    "hour:minute": "05:27",
-    "posture": {
-        "good": 50.0,
-        "bad": 50.0
-    }
-}
