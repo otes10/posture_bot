@@ -6,14 +6,21 @@ from picamera import PiCamera
 from random import randint
 import json
 
+from aws import upload_file
+from io import BytesIO
+
+import cv2
+import numpy as np
+from keras import models
+
 # Config options
-FILE_LOCATION_PHOTOS = '/home/pi/nwhacks/api/photos/'
+FILE_LOCATION_PHOTOS = '/photos/'
 FILE_LOCATION_API = '/home/pi/nwhacks/api/data/'
 TIMEZONE = 'America/Los Angeles'
 
 # Helper methods
 def image_analysis(img_name):
-    #TODO: change this to fit model
+    #TODO: change this to implement model
     res = randint(0,100)
 
     # returns a tuple of % good and % bad
@@ -24,7 +31,8 @@ date = time_now.date()
 hour_min = time_now.time()
 
 # Save a current date + time for filename
-timestr = str(hour_min.hour) + ':' + str(hour_min.minute)
+##Change column to underscore because crashes on pc
+timestr = str(date.year) + '_' + str(date.month) + '_' + str(date.day) + "_" + str(hour_min.hour) + '_' + str(hour_min.minute)
 img_file = FILE_LOCATION_PHOTOS + timestr + '.jpg'
 
 datastr = str(date.year) + '_' + str(date.month) + '_' + str(date.day)
@@ -47,7 +55,10 @@ camera.awb_mode = 'off'
 camera.awb_gains = g
 
 # Finally, take a photo with the fixed settings
-camera.capture(img_file)
+img_ = BytesIO()
+camera.capture(img_, 'jpeg')
+img_.seek(0)
+upload_file(img_, img_file)
 
 good, bad = image_analysis(img_file)
 
@@ -57,11 +68,24 @@ data['hour'] = str(hour_min.hour)
 data['minute'] = str(hour_min.minute)
 data['posture'] = {'good':good, 'bad':bad}
 
+
 import os
-empty = os.stat(data_file).st_size == 0
+# check if size of file is 0
+
+if not os.path.exists(data_file):
+    prev = []
+    open(data_file,'a').close() 
+# if file is empty
+elif os.path.getsize(data_file) == 0:
+    prev = []
+else:
+    prev = json.load(open(data_file, 'r'))
+    print(prev)
+
+
+
+# Append new dictionary entry to end of the list
+prev.append(data)
 
 # Change this to store a list of JSON rather than append JSON dictionaries to the end of the file
-json.dump(data,open(data_file, "a+"), indent=3)
-with open(data_file, "a+") as outfile:
-    if not empty:
-        outfile.write(',\n')
+json.dump(prev,open(data_file, "w"), indent=3)
