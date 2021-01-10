@@ -15,6 +15,7 @@ def load_images_from_folder(folder):
 
 mymodel = models.load_model('posture_model_canny_aug.h5')
 
+# Predicts all images from model/testing
 images = load_images_from_folder('testing')
 i = 0
 for image in images:
