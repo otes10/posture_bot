@@ -7,6 +7,7 @@ Here is a basic 'snapshot' of the project architecture that we utilized:
 The DevPost submission can be found [here](https://devpost.com/software/piposture?ref_content=user-portfolio&ref_feature=in_progress).
 
 The YouTube pitch that goes through a brief summary of our solution and demos the individual parts can be found here:
+
 [![](http://img.youtube.com/vi/5LHemZH6_CE/0.jpg)](http://www.youtube.com/watch?v=5LHemZH6_CE "")
 
 > Our pitch was cobbled up together by one of our team members in 30 minutes due to time constraints, so please excuse the lack of production quality. The main focus of it is to introduce the cool different aspects we worked with and present our end result after 24 hours!
