@@ -2,8 +2,12 @@
 A Discord bot that works with your Raspberry Pi to take snapshots and analyze your sitting posture through a self-trained CNN model! This was made for a 24 hour hackathon (NWHacks at the University of British Columbia) by a team that consists of a mix of intermediate to beginner 'hackers'. As such, this is very much a prototype project, but it has been built to allow for anyone to pick up and continue this work later on!
 
 Here is a basic 'snapshot' of the project architecture that we utilized:
+
 ![](./structure.png)
 
+The **Discord bot** acts as the front-end for the user to interact with. The Raspberry Pi hosts the **Flask API**, our **self-trained CNN model**, and controls the camera for automated snapshots throughout the day. The photos taken through the day are stored inside an instance of an AWS S3 storage. 
+
+## Submissions
 The DevPost submission can be found [here](https://devpost.com/software/piposture?ref_content=user-portfolio&ref_feature=in_progress).
 
 The YouTube pitch that goes through a brief summary of our solution and demos the individual parts can be found here:
