@@ -1,5 +1,7 @@
 # PiPosture
-A Discord bot that works with your Raspberry Pi to take snapshots and analyze your sitting posture through a self-trained CNN model! This was made for a 24 hour hackathon (NWHacks at the University of British Columbia) by a team that consists of a mix of intermediate to beginner 'hackers'. As such, this is very much a prototype project, but it has been built to allow for anyone to pick up and continue this work later on!
+A Discord bot that works with your Raspberry Pi to take snapshots and analyze your sitting posture through a self-trained CNN model!
+
+This was made for a 24 hour hackathon (_NWHacks_ at the _University of British Columbia_) by a team that consists of a mix of intermediate to beginner 'hackers'. As such, this is very much a prototype project, but it has been built to allow for anyone to pick up and continue this work later on!
 
 Here is a basic 'snapshot' of the project architecture that we utilized:
 
